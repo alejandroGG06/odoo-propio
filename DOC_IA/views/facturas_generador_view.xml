@@ -1,0 +1,47 @@
+<odoo>
+    <record id="view_form_factura_ocr" model="ir.ui.view">
+        <field name="name">Factura IA</field>
+        <field name="model">doc.ia.facturas_generador</field>
+        <field name="arch" type="xml">
+            <form string="Factura OCR">
+                <header>
+                    <button name="action_generate_factura" 
+                            type="object" 
+                            string="Procesar PDF"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('estado', '=', 'terminado')]}"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="image_filename"/>
+                        <field name="image" filename="image_filename"/>
+                        <field name="estado"/>
+                    </group>
+
+                    <group string="Resultado IA">
+                        <field name="resultado" widget="textarea"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_factura_ocr" model="ir.actions.act_window">
+        <field name="name">Factura OCR</field>
+        <field name="res_model">doc.ia.facturas_generador</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Carga una imagen de una factura para analizarla con IA.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_factura_ocr" 
+              name="Facturas" 
+              parent="menu_doc_ia_root" 
+              action="action_factura_ocr" 
+              sequence="20"/>
+</odoo>

@@ -1,0 +1,67 @@
+<odoo>
+    <!-- Vista de formulario con botón para generar documento -->
+    <record id="view_form_doc_ia_generador" model="ir.ui.view">
+        <field name="name">doc.ia.generador.form</field>
+        <field name="model">doc.ia.generador</field>
+        <field name="arch" type="xml">
+            <form string="Generador de Documentos IA">
+                <header>
+                    <!-- Botón para generar el documento con IA -->
+                    <button name="action_generate_document"
+                            type="object"
+                            string="Generar Documento"
+                            class="btn-primary"/>
+                </header>
+                <sheet>
+                    <notebook>
+                        <page string="Configuración">
+                            <group>
+                                <field name="name"/>
+                                <field name="description"/>
+                                <field name="module_name"/>
+                                <field name="context_info"/>
+                            </group>
+                        </page>
+                        <page string="Documento Generado">
+                            <field name="generar"
+                                   nolabel="1"
+                                   readonly="1"
+                                   widget="text"
+                                   style="min-height: 300px; white-space: pre-wrap;"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista de lista -->
+    <record id="view_tree_doc_ia_generador" model="ir.ui.view">
+        <field name="name">doc.ia.generador.tree</field>
+        <field name="model">doc.ia.generador</field>
+        <field name="arch" type="xml">
+            <tree string="Documentos Generados">
+                <field name="name"/>
+                <field name="module_name"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Acción para abrir el modelo -->
+    <record id="action_doc_ia_generador" model="ir.actions.act_window">
+        <field name="name">Documentos Generados</field>
+        <field name="res_model">doc.ia.generador</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+     <!-- Menú raíz -->
+    <menuitem id="menu_doc_ia_root" name="Documentación IA" sequence="10"/>
+
+    <!-- Submenú para acceder a los documentos -->
+    <menuitem id="menu_doc_ia_generador" name="Documentos Generados"
+              parent="menu_doc_ia_root"
+              action="action_doc_ia_generador"/>
+
+
+</odoo>

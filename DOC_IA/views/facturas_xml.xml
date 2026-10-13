@@ -1,0 +1,64 @@
+<odoo>
+    <!-- Vista lista (tree) -->
+    <record id="view_tree_factura_xml" model="ir.ui.view">
+        <field name="name">doc.ia.facturas_xml.tree</field>
+        <field name="model">doc.ia.facturas_xml</field>
+        <field name="arch" type="xml">
+            <tree create="true" edit="true" delete="true">
+                <field name="name"/>
+                <field name="file_filename"/>
+                <field name="estado"/>
+                <field name="resultado"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista formulario (form) -->
+    <record id="view_form_factura_xml" model="ir.ui.view">
+        <field name="name">doc.ia.facturas_xml.form</field>
+        <field name="model">doc.ia.facturas_xml</field>
+        <field name="arch" type="xml">
+            <form string="Factura XML">
+                <header>
+                    <button name="action_generate_factura" 
+                            type="object" 
+                            string="Procesar XML"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('estado', '=', 'terminado')]}"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="file_filename"/>
+                        <field name="file" filename="file_filename"/>
+                        <field name="estado"/>
+                    </group>
+
+                    <group string="Resultado IA">
+                        <field name="resultado" widget="textarea"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción -->
+    <record id="action_factura_xml" model="ir.actions.act_window">
+        <field name="name">Facturas XML</field>
+        <field name="res_model">doc.ia.facturas_xml</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Sube un archivo XML de factura para analizarlo con IA.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menú de facturas XML -->
+    <menuitem id="menu_factura_xml" 
+              name="Facturas XML" 
+              parent="menu_doc_ia_root" 
+              action="action_factura_xml" 
+              sequence="20"/>
+</odoo>

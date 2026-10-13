@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_doc_ia_generador,access.doc.ia.generador,model_doc_ia_generador,,1,1,1,1
+access_facturas_generador_user,access_facturas_generador_user,model_doc_ia_facturas_generador,base.group_user,1,1,1,1
+access_doc_ia_facturas_xml,access_doc_ia_facturas_xml,model_doc_ia_facturas_xml,base.group_user,1,1,1,1

@@ -1,0 +1,15 @@
+<odoo>
+    <record id="view_order_form_inherit_autofirma" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.autofirma</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_sign_autofirma" string="Firmar con Autofirma" 
+                        type="object" class="btn-primary" 
+                        invisible="is_signed_electronic == True"/>
+                <field name="is_signed_electronic" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
