@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_task_form_inherit_signature_portal" model="ir.ui.view">
+        <field name="name">project.task.form.inherit.signature.portal</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+
+            <!-- Botón Portal -->
+
+            <xpath expr="//div[@name='button_box']" position="inside">
+
+                <button
+                    name="%(portal.portal_share_action)d"
+                    type="action"
+                    class="oe_stat_button"
+                    icon="fa-pencil-square-o"
+                    string="Portal"/>
+
+            </xpath>
+
+
+            <!-- Página de firma -->
+
+            <xpath expr="//notebook" position="inside">
+
+                <page
+                    string="Firma Digital "
+                    name="signature_management">
+
+                    <group>
+
+                        <group string="Documento ">
+
+                            <field
+                                name="custom_document_name"
+                                invisible="1"/>
+
+                            <field
+                                name="custom_document_id"
+                                filename="custom_document_name"/>
+
+                        </group>
+
+                    </group>
+
+
+                    <separator
+                        string="Firmantes "/>
+
+
+                    <field name="signing_line_ids">
+
+                        <list editable="bottom">
+
+                            <field
+                                name="partner_id"
+                                required="1"/>
+
+                            <field
+                                name="is_signed"
+                                readonly="1"/>
+
+                            <field
+                                name="signer_name"
+                                readonly="1"/>
+
+                            <field
+                                name="signature_date"
+                                readonly="1"/>
+
+                            <field
+                                name="signature_ip"
+                                readonly="1"/>
+
+                            <field
+                                name="custom_signature"
+                                widget="image"
+                                readonly="1"/>
+
+                        </list>
+
+                    </field>
+
+                </page>
+
+            </xpath>
+
+        </field>
+
+    </record>
+
+</odoo>

@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ===================================================== -->
+    <!-- BOTÓN EN LA TAREA DEL PORTAL -->
+    <!-- ===================================================== -->
+
+    <template id="portal_my_task_inherit_sign_button"
+              inherit_id="project.portal_my_task">
+
+        <xpath expr="//div[@id='task_content']" position="before">
+
+            <!-- Validamos si quedan firmas pendientes generales en la tarea -->
+            <t t-set="any_pending_line"
+               t-value="task.signing_line_ids.filtered(lambda l: not l.is_signed)"/>
+
+            <t t-if="task.custom_document_id and any_pending_line">
+
+                <div class="alert alert-warning d-flex justify-content-between align-items-center my-3">
+
+                    <div>
+
+                        <i class="fa fa-pencil-square-o me-2"/>
+
+                        <strong>
+                            Este documento requiere una o más firmas digitales.
+                        </strong>
+
+                    </div>
+
+                    <a t-attf-href="/my/task/sign/#{task.id}"
+                       class="btn btn-success">
+
+                        <i class="fa fa-pencil me-1"/>
+
+                        Proceder a firmar
+
+                    </a>
+
+                </div>
+
+            </t>
+
+        </xpath>
+
+    </template>
+
+
+    <!-- ===================================================== -->
+    <!-- PANTALLA DE FIRMA -->
+    <!-- ===================================================== -->
+
+    <template id="portal_task_sign_page"
+              name="Firmar Documento">
+
+        <t t-call="portal.portal_layout">
+
+            <div class="container mt-4 mb-5">
+
+                <div class="row justify-content-center">
+
+                    <div class="col-lg-10">
+
+                        <div class="card shadow">
+
+                            <div class="card-header bg-primary text-white">
+
+                                <h4 class="mb-0">
+
+                                    <span t-field="task.name"/>
+
+                                </h4>
+
+                            </div>
+
+                            <div class="card-body">
+
+
+                                <!-- ========================================= -->
+                                <!-- PDF -->
+                                <!-- ========================================= -->
+
+                                <t t-if="task.custom_document_id">
+
+                                    <div class="mb-3">
+
+                                        <a class="btn btn-primary" target="_blank" t-attf-href="/my/task/pdf/#{task.id}">
+                                            <i class="fa fa-download me-1"/> Descargar PDF Estado Actual
+                                        </a>
+
+                                    </div>
+
+                                    <iframe t-attf-src="/my/task/pdf/#{task.id}"
+                                            class="w-100 border rounded"
+                                            style="height:700px;">
+                                    </iframe>
+
+                                </t>
+
+                                <t t-else="">
+
+                                    <div class="alert alert-danger">
+
+                                        No existe ningún documento para firmar.
+
+                                    </div>
+
+                                </t>
+
+
+                                <!-- ========================================= -->
+                                <!-- FORMULARIO DE FIRMA EN TURNO -->
+                                <!-- ========================================= -->
+
+                                <t t-if="task.custom_document_id and is_assigned_to_sign">
+
+                                    <hr/>
+
+                                    <div class="alert alert-info border-start border-info border-3">
+
+                                        <h5>
+
+                                            <i class="fa fa-info-circle me-2"/>
+
+                                            Turno de Firma
+
+                                        </h5>
+
+                                        <p class="mb-0">
+
+                                            Por favor, entregue el dispositivo a: <strong t-field="user_line.partner_id.name"/>.
+
+                                        </p>
+
+                                    </div>
+
+                                    <form method="POST"
+                                          t-attf-action="/my/task/sign/#{task.id}">
+
+                                        <input type="hidden"
+                                               name="csrf_token"
+                                               t-att-value="request.csrf_token()"/>
+
+                                        <div class="mb-3">
+
+                                            <label class="form-label">
+
+                                                Nombre completo del firmante actual
+
+                                            </label>
+
+                                            <!-- Se inicializa con el nombre del contacto asignado en la línea -->
+                                            <input
+                                                class="form-control"
+                                                type="text"
+                                                name="signer_name"
+                                                required="required"
+                                                t-att-value="user_line.partner_id.name"/>
+
+                                        </div>
+
+                                        <input
+                                            id="signature_input"
+                                            type="hidden"
+                                            name="signature"/>
+
+                                        <div class="alert alert-secondary">
+
+                                            Dibuje su firma dentro del siguiente recuadro.
+
+                                        </div>
+
+                                        <canvas
+                                            id="signature-canvas"
+                                            class="w-100 border rounded bg-white"
+                                            style="height:220px;">
+                                        </canvas>
+
+                                        <div class="mt-3 d-flex justify-content-between">
+
+                                            <button
+                                                type="button"
+                                                id="clear-signature"
+                                                class="btn btn-secondary">
+
+                                                <i class="fa fa-trash me-1"/>
+
+                                                Limpiar
+
+                                            </button>
+
+                                            <button
+                                                type="submit"
+                                                class="btn btn-success">
+
+                                                <i class="fa fa-check me-1"/>
+
+                                                Confirmar y Guardar Firma
+
+                                            </button>
+
+                                        </div>
+
+                                    </form>
+
+                                </t>
+
+
+                                <!-- ========================================= -->
+                                <!-- TODOS HAN FIRMADO -->
+                                <!-- ========================================= -->
+
+                                <t t-if="already_signed">
+
+                                    <div class="alert alert-success mt-4">
+
+                                        <h5>
+
+                                            <i class="fa fa-check-circle me-2"/>
+
+                                            Proceso de firma completado
+
+                                        </h5>
+
+                                        <hr/>
+
+                                        <p class="text-muted">
+
+                                            Todos los firmantes asignados han completado el documento satisfactoriamente.
+
+                                        </p>
+
+                                    </div>
+
+                                </t>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </t>
+
+    </template>
+
+</odoo>
